@@ -1,0 +1,92 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema tp2
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema tp2
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `tp2` ;
+USE `tp2` ;
+
+-- -----------------------------------------------------
+-- Table `tp2`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tp2`.`user` (
+  `userid` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(20) NULL DEFAULT NULL,
+  `password` VARCHAR(255) NULL DEFAULT NULL,
+  `bio` VARCHAR(45) NULL DEFAULT NULL,
+  `profiel_image` VARCHAR(255) NULL DEFAULT NULL,
+  `created_time` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`userid`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 7;
+
+
+-- -----------------------------------------------------
+-- Table `tp2`.`follow`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tp2`.`follow` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `follow_id` VARCHAR(45) NULL DEFAULT NULL,
+  `following_id` VARCHAR(45) NULL DEFAULT NULL,
+  `created_at` VARCHAR(45) NULL DEFAULT NULL,
+  `userid` INT(11) NOT NULL,
+  PRIMARY KEY (`id`, `userid`),
+  INDEX `fk_follow_user1_idx` (`userid` ASC) VISIBLE,
+  CONSTRAINT `fk_follow_user1`
+    FOREIGN KEY (`userid`)
+    REFERENCES `tp2`.`user` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 4;
+
+
+-- -----------------------------------------------------
+-- Table `tp2`.`like`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tp2`.`like` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `postid` INT(11) NOT NULL,
+  `userid` INT(11) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `unique_like` (`postid` ASC, `userid` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 9;
+
+
+-- -----------------------------------------------------
+-- Table `tp2`.`post`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tp2`.`post` (
+  `postid` INT(11) NOT NULL AUTO_INCREMENT,
+  `image_path` VARCHAR(255) NULL DEFAULT NULL,
+  `caption` VARCHAR(45) NULL DEFAULT NULL,
+  `created_at` VARCHAR(45) NULL DEFAULT NULL,
+  `created_at1` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  `userid` INT(11) NOT NULL,
+  PRIMARY KEY (`postid`, `userid`),
+  INDEX `fk_post_user_idx` (`userid` ASC) VISIBLE,
+  CONSTRAINT `fk_post_user`
+    FOREIGN KEY (`userid`)
+    REFERENCES `tp2`.`user` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 6;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
