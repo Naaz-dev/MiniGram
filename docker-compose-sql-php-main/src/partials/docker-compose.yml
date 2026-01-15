@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: voorraadbeheer
+    ports:
+      - "3306:3306"
+
+  web:
+    image: php:8.2-apache
+    volumes:
+      - ./your-code:/var/www/html
+    ports:
+      - "8080:80"
