@@ -32,15 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 <!DOCTYPE html>
 <html>
-<head><title>New post</title><link rel="stylesheet" href="src/style.css"></head>
+<head><title>New post</title><link rel="stylesheet" href="css/style.css"></head>
 <body>
-<div class="header">
-  <a href="index.php">MiniGram</a>
-  <a href="new_post.php">New post</a>
-  <div class="navspace"></div>
-  <a href="profile.php">Profile</a>
-  <a href="logout.php">Logout</a>
-</div>
+<?php require_once "header.php";?> 
 <div class="container">
   <?php if ($ok) echo '<div class="notice ok">'.h($ok).'</div>'; ?>
   <?php if ($err) echo '<div class="notice err">'.h($err).'</div>'; ?>

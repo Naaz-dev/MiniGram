@@ -22,19 +22,10 @@ $pStmt->close();
 <html>
 <head>
   <title><?= h($user['username']); ?>'s Profile</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="header">
-  <a href="index.php">MiniGram</a>
-  <?php if ($_SESSION["userid"] == $uid): ?>
-    <a href="new_post.php">New post</a>
-    <div class="navspace"></div>
-    <a href="logout.php">Logout</a>
-  <?php else: ?>
-    <a href="index.php">Back to Feed</a>
-  <?php endif; ?>
-</div>
+<?php require_once "header.php";?> 
 
 <div class="container">
   <div class="card">

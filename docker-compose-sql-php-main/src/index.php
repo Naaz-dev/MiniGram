@@ -1,122 +1,59 @@
 <?php
 require_once "config.php";
-
-$uid = (int)($_SESSION["userid"] ?? 0);
-
-// Prepare the SQL query using a placeholder for $uid
-$sql = "
-SELECT 
-    p.postid,
-    p.image_path,
-    p.caption,
-    p.created_at,
-    u.userid,
-    u.username,
-    u.profiel_image,
-
-    COUNT(l.id) AS like_count,
-    CASE WHEN SUM(l.userid = ?) > 0 THEN TRUE ELSE FALSE END AS is_liked
-
-FROM post p
-JOIN user u ON p.userid = u.userid
-LEFT JOIN `like` l ON l.postid = p.postid
-
-GROUP BY 
-    p.postid, p.image_path, p.caption, p.created_at,
-    u.userid, u.username, u.profiel_image
-
-ORDER BY p.postid DESC
-LIMIT 50
-";
-
-// Prepare statement
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    die("Prepare failed: " . $conn->error);
-}
-
-// Bind the user id safely
-$stmt->bind_param("i", $uid);
-
-// Execute and get result
-$stmt->execute();
-$res = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>MiniGram Feed</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<div class="header">
-    <a href="index.php">MiniGram</a>
-
-    <?php if ($uid): ?>
-        <a href="new_post.php">New Post</a>
-        <div class="navspace"></div>
-        <a href="profile.php">Profile</a>
-        <a href="logout.php">Logout</a>
-    <?php else: ?>
-        <div class="navspace"></div>
-        <a href="signup.php">Sign Up</a>
-        <a href="login.php">Login</a>
-    <?php endif; ?>
-</div>
+<?php require_once "header.php";?>  
 
 <div class="container">
-
-<?php if ($res && $res->num_rows > 0): ?>
+    <?php if ($res && $res->num_rows > 0): ?>
     <?php while ($row = $res->fetch_assoc()): ?>
-        <div class="card">
-
-            <div class="content">
-               <div class="row">
-  <strong>
-    <a href="profile.php?userid=<?= (int)$row['userid']; ?>">
-      <?= h($row['username']); ?>
-    </a>
-  </strong>
-  <img class="avatar" src="<?= h($row['profiel_image'] ?: 'assets/placeholder.jpg'); ?>" alt="avatar">
-  <span class="meta"><?= h($row['created_at']); ?></span>
-</div>
-
-
+        <div class="content">
+            <div class="left_side_container">
+                <div class="profile_container">
+                    <a class="profile_link" href="profile.php?userid=<?= (int)$row['userid']; ?>">
+                        <?= h($row['username']); ?>
+                    </a>
+                    <img class="avatar" src="<?= h($row['profiel_image'] ?: 'assets/placeholder.jpg'); ?>" alt="avatar">                 
                 </div>
-            </div>
-
-            <img src="<?= h($row['image_path']); ?>" alt="post image">
-
-            <div class="content">
-                <p><?= h($row['caption']); ?></p>
-
                 <div class="actions">
-
                     <?php if ($uid): ?>
                         <form action="like.php" method="POST">
                             <input type="hidden" name="postid" value="<?= (int)$row['postid']; ?>">
-                            <button type="submit">
-                                <?= $row['is_liked'] ? "Unlike" : "Like"; ?>
+                            <button 
+                                class="like_button <?= $row['is_liked'] ? 'liked' : 'unliked'; ?>" 
+                                type="submit"
+                            >
                             </button>
                         </form>
                     <?php endif; ?>
-
-                    <div class="like-count">
-                        <?= (int)$row['like_count']; ?> likes
+                    <p class="action_content">likes:</p>
+                    <div class="action_content">
+                        <?= (int)$row['like_count']; ?>
                     </div>
-
-                </div>
-
+                    <p class="action_content">Posted at:</p>
+                    <span class="action_content">
+                        <?= h($row['created_at']); ?>
+                    </span>     
+                </div>                     
             </div>
-
+            <div class="right_side_container">
+                <div class="post_container">
+                    <h3 class="caption"><?= h($row['caption']); ?></h3>     
+                    <img class="post_image" src="<?= h($row['image_path']); ?>" alt="post image">
+                </div>
+                
+            </div>
         </div>
     <?php endwhile; ?>
-<?php else: ?>
-    <div class="notice">No posts yet. Be the first!</div>
-<?php endif; ?>
-
+    <?php else: ?>
+        <div class="notice">No posts yet. Be the first!</div>
+    <?php endif; ?>
 </div>
-
 </body>
 </html>

@@ -38,13 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 <!DOCTYPE html>
 <html>
-<head><title>Sign up</title><link rel="stylesheet" href="assets/style.css"></head>
+<head><title>Sign up</title><link rel="stylesheet" href="css/style.css"></head>
 <body>
-<div class="header">
-  <a href="index.php">MiniGram</a>
-  <div class="navspace"></div>
-  <a href="login.php">Login</a>
-</div>
+<?php require_once "header.php";?> 
 <div class="container">
   <?php if ($ok) echo '<div class="notice ok">'.h($ok).'</div>'; ?>
   <?php if ($err) echo '<div class="notice err">'.h($err).'</div>'; ?>
