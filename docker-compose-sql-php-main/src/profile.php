@@ -44,9 +44,9 @@ $pStmt->close();
   <h3>Posts</h3>
   <?php if ($posts && $posts->num_rows): ?>
     <?php while ($p = $posts->fetch_assoc()): ?>
-      <div class="card">
-        <img src="<?= h($p['image_path']); ?>" alt="post">
-        <div class="content">
+      <div class="content">
+        <img class="post_image" src="<?= h($p['image_path']); ?>" alt="post">
+        <div class="profile_post_description">
           <strong><?= h($p['caption']); ?></strong>
           <div class="meta"><?= h($p['created_at']); ?></div>
         </div>
@@ -55,6 +55,5 @@ $pStmt->close();
   <?php else: ?>
     <div class="notice">No posts yet.</div>
   <?php endif; ?>
-</div>
 </body>
 </html>

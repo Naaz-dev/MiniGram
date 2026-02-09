@@ -39,11 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <?php if ($ok) echo '<div class="notice ok">'.h($ok).'</div>'; ?>
   <?php if ($err) echo '<div class="notice err">'.h($err).'</div>'; ?>
   <div class="form">
-    <h2>Create a post</h2>
-    <form method="POST" enctype="multipart/form-data">
-      <input type="file" name="image" accept="image/*" required>
-      <input type="text" name="caption" placeholder="Caption (max 45 chars)" maxlength="45">
-      <button type="submit">Post</button>
+    <h2 id="form_header">Create a post</h2>
+    <form id="new_post_form" method="POST" enctype="multipart/form-data">
+      <input class="form_input" type="file" name="image" accept="image/*" required>
+      <input class="form_input" type="text" name="caption" placeholder="Caption (max 45 chars)" maxlength="45">
+      <button class="form_button" type="submit">Post</button>
     </form>
   </div>
 </div>
